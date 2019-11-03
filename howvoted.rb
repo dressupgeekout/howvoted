@@ -1,20 +1,21 @@
 require 'erb'
 require 'rack'
 require 'sinatra'
-require 'pstore'
+require 'sequel'
 
-$LOAD_PATH.unshift(File.join(__dir__, "lib"))
-require 'vote_result'
+########## ########## ########## ##########
+
+DB = Sequel.connect(ENV["DB_URI"])
+$LOAD_PATH.unshift(File.join(__dir__, "models"))
 require 'legislator'
+require 'roll_call'
+require 'vote'
 
-legislators = {}
+########## ########## ########## ##########
 
-(2017..Time.now.year).each do |year|
-  legislators[year] = PStore.new(sprintf(Legislator::STORE_PATH_TEMPLATE, year))
-end
-
-LEGISLATORS = legislators
 CONSTITUTION_RATIFICATION_YEAR = 1787
+
+########## ########## ########## ##########
 
 helpers do
   def h(str)
@@ -64,52 +65,39 @@ helpers do
   end
 end
 
-get '/' do
-  store = LEGISLATORS[year]
+########## ########## ########## ##########
 
+get '/' do
   erb :legislators, :layout => :layout_default, :locals => {
     :congress => year_to_congress,
-    :legislators => store.transaction { store["__ALL__"] }, 
+    :legislators => Legislator.where(:year => year).all,
   }
 end
 
 get '/record/?' do
-  vrs = []
-  name_id = params["name_id"] # XXX or 404
+  name_id = params["name_id"] # XXX or 400
 
-  # XXX bleh
-  (1..500).each do |n|
-    vrs << VoteResult.new(:name_id => name_id, :year => year, :number => n)
-  end
+  legislator = Legislator.where(:year => year, :name_id => name_id).first
 
-  store = LEGISLATORS[year]
-  
   erb :index, :layout => :layout_default, :locals => {
     :congress => year_to_congress,
-    :results => vrs,
-    :legislator => store.transaction { store[name_id] },
+    :results => Vote.where(:legislator_id => legislator.id).all,
+    :legislator => legislator,
   }
 end
 
 get '/compare/?' do
-  name_id1 = params["name_id1"]
-  name_id2 = params["name_id2"]
-  store = LEGISLATORS[year]
+  name_id1 = params["name_id1"] # XXX or 400
+  name_id2 = params["name_id2"] # XXX or 400
 
-  vrs1 = []
-  vrs2 = []
-
-  # XXX bleh
-  (1..500).each do |n|
-    vrs1 << VoteResult.new(:name_id => name_id1, :year => year, :number => n)
-    vrs2 << VoteResult.new(:name_id => name_id2, :year => year, :number => n)
-  end
+  legislator1 = Legislator.where(:year => year, :name_id => name_id1).first
+  legislator2 = Legislator.where(:year => year, :name_id => name_id2).first
 
   erb(:compare, :layout => :layout_default, :locals => {
-    :legislator1 => store.transaction { store[name_id1] },
-    :legislator2 => store.transaction { store[name_id2] },
-    :legislator1_results => vrs1,
-    :legislator2_results => vrs2,
+    :legislator1 => legislator1,
+    :legislator2 => legislator2,
+    :legislator1_results => Vote.where(:legislator_id => legislator1.id).all,
+    :legislator2_results => Vote.where(:legislator_id => legislator2.id).all,
     :congress => year_to_congress,
   })
 end

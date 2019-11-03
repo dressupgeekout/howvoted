@@ -1,6 +1,8 @@
 BUNDLE?=	bundle
 RUBY?=		ruby
 
+DB_URI?=	sqlite://$(CURDIR)/howvoted.sqlite3
+
 .PHONY: help
 help:
 	@echo Available targets:
@@ -8,18 +10,20 @@ help:
 	@echo - legislator-cache
 	@echo - stylesheets
 	@echo - server
+	@echo - migrations
 	@echo - all
+	@echo - console
 
 .PHONY: cache
-cache:
-	$(BUNDLE) exec $(RUBY) lib/vote_result.rb --year 2016 --limit 622
-	$(BUNDLE) exec $(RUBY) lib/vote_result.rb --year 2017 --limit 710
-	$(BUNDLE) exec $(RUBY) lib/vote_result.rb --year 2018 --limit 500
-	$(BUNDLE) exec $(RUBY) lib/vote_result.rb --year 2019 --limit 609
+cache: migrations
+	$(BUNDLE) exec $(RUBY) script/build_vote_results.rb --year 2016 --limit 622 --db $(DB_URI)
+	$(BUNDLE) exec $(RUBY) script/build_vote_results.rb --year 2017 --limit 710 --db $(DB_URI)
+	$(BUNDLE) exec $(RUBY) script/build_vote_results.rb --year 2018 --limit 500 --db $(DB_URI)
+	$(BUNDLE) exec $(RUBY) script/build_vote_results.rb --year 2019 --limit 609 --db $(DB_URI)
 
-.PHONY: legislator-cache
-legislator-cache:
-	$(BUNDLE) exec $(RUBY) lib/legislator.rb 2016
+.PHONY: migrations
+migrations:
+	$(BUNDLE) exec sequel -E -m migrations  $(DB_URI)
 
 .PHONY: stylesheets
 stylesheets: public/css/style.css
@@ -33,4 +37,8 @@ server:
 	$(BUNDLE) exec rackup
 
 .PHONY: all
-all: cache legislator-cache stylesheets server
+all: migrations cache legislator-cache stylesheets server
+
+.PHONY: console
+console:
+	DB_URI=$(DB_URI) $(BUNDLE) exec sequel $(DB_URI)
