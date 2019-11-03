@@ -94,13 +94,16 @@ end
 all_legislators = Legislator.select(:id, :name_id).where(:year => @year)
 
 # OK, plugging in all the individual votes. Where should we start?
-start = 0
+start = -1
 (1..@n_roll_calls).each do |i|
   if not RollCall.where(:number => i, :year => @year).any?
     start = i
     break
   end
 end
+
+# Didn't set the start? That means we're all done!
+exit if start == -1
 
 (start..@n_roll_calls).peach(4) do |i|
   DB.transaction do

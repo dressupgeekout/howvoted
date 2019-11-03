@@ -7,7 +7,6 @@ DB_URI?=	sqlite://$(CURDIR)/howvoted.sqlite3
 help:
 	@echo Available targets:
 	@echo - cache
-	@echo - legislator-cache
 	@echo - stylesheets
 	@echo - server
 	@echo - migrations
@@ -37,7 +36,7 @@ server:
 	$(BUNDLE) exec rackup
 
 .PHONY: all
-all: migrations cache legislator-cache stylesheets server
+all: migrations cache stylesheets server
 
 .PHONY: console
 console:
