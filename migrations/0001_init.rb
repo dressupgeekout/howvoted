@@ -11,6 +11,7 @@ Sequel.migration do
       String :role, :text => true
       String :name, :text => true
       String :full_name, :text => true
+      TrueClass :senator, :default => false
     end
 
     create_table(:roll_calls) do
@@ -21,6 +22,7 @@ Sequel.migration do
       String :legisnum, :text => true
       String :question, :text => true
       String :descr, :text => true
+      TrueClass :senate, :default => false
     end
 
     create_table(:votes) do
