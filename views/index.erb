@@ -15,13 +15,13 @@
   </thead>
 
   <tbody>
-    <% results.each do |vr| %>
+    <% votes.each do |vr| %>
       <tr>
-        <td><%= vr.date %></td>
-        <td><%= vr.number %></td>
-        <td><a href="#"><%= vr.legisnum %></a></td>
+        <td><%= vr.roll_call.date %></td>
+        <td><%= vr.roll_call.number %></td>
+        <td><a href="#"><%= vr.roll_call.legisnum %></a></td>
         <td><%= vr.vote %></td>
-        <td><span class="vote-descr"><%= vr.descr %></span> <br/> <%= vr.question %></td>
+        <td><span class="vote-descr"><%= vr.roll_call.descr %></span> <br/> <%= vr.roll_call.question %></td>
         <!--<td><%= h(vr.inspect) %></td>-->
       </tr>
     <% end %>

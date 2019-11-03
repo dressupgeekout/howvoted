@@ -81,7 +81,7 @@ get '/record/?' do
 
   erb :index, :layout => :layout_default, :locals => {
     :congress => year_to_congress,
-    :results => Vote.where(:legislator_id => legislator.id).all,
+    :votes => Vote.where(:legislator_id => legislator.id).all.sort_by { |v| v.roll_call.number },
     :legislator => legislator,
   }
 end
@@ -96,8 +96,8 @@ get '/compare/?' do
   erb(:compare, :layout => :layout_default, :locals => {
     :legislator1 => legislator1,
     :legislator2 => legislator2,
-    :legislator1_results => Vote.where(:legislator_id => legislator1.id).all,
-    :legislator2_results => Vote.where(:legislator_id => legislator2.id).all,
+    :legislator1_results => Vote.where(:legislator_id => legislator1.id).all.sort_by { |v| v.roll_call.number },
+    :legislator2_results => Vote.where(:legislator_id => legislator2.id).all.sort_by { |v| v.roll_call.number },
     :congress => year_to_congress,
   })
 end

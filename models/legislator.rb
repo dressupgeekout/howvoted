@@ -1,5 +1,5 @@
 class Legislator < Sequel::Model(:legislators)
   def pretty
-    return "#{@name} (#{@party}-#{@state})"
+    return "#{self.name} (#{self.party}-#{self.state})"
   end
 end
