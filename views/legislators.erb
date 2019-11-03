@@ -22,7 +22,7 @@
     <% legislators.each do |legislator| %>
       <tr>
         <td><%= legislator.party %>-<%= legislator.state %></td>
-        <td><a href="/record?year=<%= year %>&name_id=<%=legislator.name_id%>"><%= legislator.name %></a></td>
+        <td><a href="/record?year=<%= year %>&name_id=<%=legislator.name_id%>"><%= legislator.full_name %></a></td>
       </tr>
     <% end %>
   </tbody>
