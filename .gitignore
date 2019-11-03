@@ -6,5 +6,5 @@
 .ruby-version
 .sass-cache
 Gemfile.lock
-public
+public/css
 vendor

@@ -5,6 +5,8 @@
   <meta charset="utf-8"/>
   <title>Howvoted.</title>
   <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+  <script type="application/javascript" href="/js/jquery-3.4.1.min.js">
+  </script>
 </head>
 <body>
 
@@ -12,10 +14,12 @@
   <hgroup>
     <h1>Howvoted.</h1>
   </hgroup>
-
-  <a href="/">All Legislators</a>
-
-  <br/>
+  <nav>
+    <ul>
+      <li><a href="/">All Legislators</a></li>
+      <li><a href="/compare">Compare</a></li>
+    </ul>
+  </nav>
 </header>
 
 <%= yield %>
