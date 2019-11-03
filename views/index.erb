@@ -19,7 +19,11 @@
       <tr>
         <td><%= vr.roll_call.date %></td>
         <td><%= vr.roll_call.number %></td>
-        <td><a href="#"><%= vr.roll_call.legisnum %></a></td>
+        <td>
+          <% if vr.roll_call.bill_link %>
+            <a href="<%= vr.roll_call.bill_link %>"><%= vr.roll_call.legisnum %></a>
+          <% end %>
+        </td>
         <td><%= vr.vote %></td>
         <td><span class="vote-descr"><%= vr.roll_call.descr %></span> <br/> <%= vr.roll_call.question %></td>
         <!--<td><%= h(vr.inspect) %></td>-->

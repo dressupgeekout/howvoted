@@ -17,7 +17,7 @@
 
   <br/>
 
-  <% (2017..Time.now.year).each do |y| %>
+  <% (2016..Time.now.year).each do |y| %>
     <ul class="years-list">
       <li><a href="<%= request.path_info %>?<%= Rack::Utils.build_query(params_with_changed_year(y)) %>"><%= y %></a></li>
     </ul>
