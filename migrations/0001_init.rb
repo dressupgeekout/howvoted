@@ -10,6 +10,7 @@ Sequel.migration do
       String :state, :text => true
       String :role, :text => true
       String :name, :text => true
+      String :full_name, :text => true
     end
 
     create_table(:roll_calls) do

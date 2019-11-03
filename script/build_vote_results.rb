@@ -4,6 +4,8 @@ require 'nokogiri'
 require 'optparse'
 require 'sequel'
 
+require 'pmap'
+
 CACHE_DIR = File.join(ENV["HOME"], ".cache", "howvoted").freeze
 HOST = "clerk.house.gov".freeze
 PATH_TEMPLATE = "/evs/%d/roll%03d.xml".freeze
@@ -43,7 +45,27 @@ require 'legislator'
 require 'roll_call'
 require 'vote'
 
-# The first "vote" is actually a roll-call
+# Obtain the mapping of name_id->fullname.
+if not File.file?("member-bioguide-ids.html")
+  system %Q(curl -L -o member-bioguide-ids.html https://www.congress.gov/help/field-values/member-bioguide-ids)
+end
+
+full_names = {}
+full_names_doc = Nokogiri::HTML(File.read("member-bioguide-ids.html"))
+
+full_names_doc.css("table tr").each do |row|
+  name_e, name_id_e = row.css("td")
+  next if not (name_e and name_id_e)
+  name = name_e.children[0].content
+  name_id = name_id_e.children[0].content
+  name_part = name.split(" (")[0]
+  name_bits = name_part.split(", ")
+  full_name = [name_bits[1], name_bits[0], name_bits[2]||""].join(" ").strip
+  full_names[name_id] = full_name
+end
+
+# The first "vote" is actually a roll-call. Instantiate all of the
+# legislators based on that.
 doc = Nokogiri.XML(get(@year, 1))
 
 DB.transaction do
@@ -62,6 +84,7 @@ DB.transaction do
     l.state = node["state"]
     l.role = node["role"]
     l.name = node.content
+    l.full_name = full_names[name_id]
     l.year = @year
     l.save
     p l
@@ -70,7 +93,7 @@ end
 
 all_legislators = Legislator.select(:id, :name_id).where(:year => @year)
 
-# Where should we start?
+# OK, plugging in all the individual votes. Where should we start?
 start = 0
 (1..@n_roll_calls).each do |i|
   if not RollCall.where(:number => i, :year => @year).any?
@@ -79,7 +102,7 @@ start = 0
   end
 end
 
-(start..@n_roll_calls).each do |i|
+(start..@n_roll_calls).peach(4) do |i|
   DB.transaction do
     doc = Nokogiri.XML(get(@year, i))
 
