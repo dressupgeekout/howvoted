@@ -16,12 +16,6 @@
   <a href="/">All Legislators</a>
 
   <br/>
-
-  <% (2016..Time.now.year).each do |y| %>
-    <ul class="years-list">
-      <li><a href="<%= request.path_info %>?<%= Rack::Utils.build_query(params_with_changed_year(y)) %>"><%= y %></a></li>
-    </ul>
-  <% end %>
 </header>
 
 <%= yield %>

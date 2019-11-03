@@ -28,8 +28,6 @@ helpers do
 
   def ord(n)
     case n % 10
-    when 0
-      return "eth"
     when 1
       return "st"
     when 2
@@ -62,6 +60,10 @@ helpers do
     new_params["year"] = new_year if not new_params["year"]
 
     return new_params
+  end
+
+  def years_for_member(name_id)
+    return Legislator.select(:year).where(:name_id => name_id).map { |l| l.year }.sort
   end
 end
 

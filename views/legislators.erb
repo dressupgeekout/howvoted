@@ -1,3 +1,11 @@
+<nav>
+  <% (2016..Time.now.year).each do |y| %>
+    <ul class="years-list">
+      <li><a href="<%= request.path_info %>?<%= Rack::Utils.build_query(params_with_changed_year(y)) %>"><%= y %></a></li>
+    </ul>
+  <% end %>
+</nav>
+
 <h2>All Legislators of the <%= congress[0] %> Congress, <%= congress[1] %> Session (<%= year %>)</h2>
 
 <h3><%= legislators.length %> total</h3>

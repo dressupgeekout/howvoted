@@ -10,8 +10,6 @@ class RollCall < Sequel::Model(:roll_calls)
   # XXX copypasta from the app
   def ord(n)
     case n % 10
-    when 0
-      return "eth"
     when 1
       return "st"
     when 2

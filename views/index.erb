@@ -1,3 +1,11 @@
+<nav>
+  <% years_for_member(params["name_id"]).each do |y| %>
+    <ul class="years-list">
+      <li><a href="<%= request.path_info %>?<%= Rack::Utils.build_query(params_with_changed_year(y)) %>"><%= y %></a></li>
+    </ul>
+  <% end %>
+</nav>
+
 <h2>Voting History of <%= legislator.name %> (<%= legislator.party %>-<%= legislator.state %>)</h2>
 
 <h3><%= congress[0] %> Congress, <%= congress[1] %> Session (<%= year %>)</h3>
@@ -14,17 +22,17 @@
   </thead>
 
   <tbody>
-    <% votes.each do |vr| %>
+    <% votes.each do |v| %>
       <tr>
-        <td><%= vr.roll_call.date %></td>
-        <td><%= vr.roll_call.number %></td>
+        <td><%= v.roll_call.date %></td>
+        <td><%= v.roll_call.number %></td>
         <td>
-          <% if vr.roll_call.bill_link %>
-            <a href="<%= vr.roll_call.bill_link %>"><%= vr.roll_call.legisnum %></a>
+          <% if v.roll_call.bill_link %>
+            <a href="<%= v.roll_call.bill_link %>"><%= v.roll_call.legisnum %></a>
           <% end %>
         </td>
-        <td><%= vr.vote %></td>
-        <td><span class="vote-descr"><%= vr.roll_call.descr %></span> <br/> <%= vr.roll_call.question %></td>
+        <td><%= v.vote %></td>
+        <td><span class="vote-descr"><%= v.roll_call.descr %></span> <br/> <%= v.roll_call.question %></td>
       </tr>
     <% end %>
   </tbody>
