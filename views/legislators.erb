@@ -1,0 +1,21 @@
+<h2>All Legislators of the <%= congress[0] %> Congress, <%= congress[1] %> Session (<%= year %>)</h2>
+
+<h3><%= legislators.length %> total</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Name</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% legislators.each do |legislator| %>
+      <tr>
+        <td><%= legislator.party %>-<%= legislator.state %></td>
+        <td><a href="/record?year=<%= year %>&name_id=<%=legislator.name_id%>"><%= legislator.name %></a></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

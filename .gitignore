@@ -1,0 +1,8 @@
+*.swo
+*.swp
+.bundle
+.ruby-version
+.sass-cache
+Gemfile.lock
+public
+vendor

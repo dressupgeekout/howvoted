@@ -1,0 +1,29 @@
+<h2>Voting History of <%= legislator.name %> (<%= legislator.party %>-<%= legislator.state %>)</h2>
+
+<h3><%= congress[0] %> Congress, <%= congress[1] %> Session (<%= year %>)</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th></th>
+      <th>Legisnum</th>
+      <th>Vote</th>
+      <th>Question</th>
+      <!--<td>(xxx)</th>-->
+    </tr>
+  </thead>
+
+  <tbody>
+    <% results.each do |vr| %>
+      <tr>
+        <td><%= vr.date %></td>
+        <td><%= vr.number %></td>
+        <td><a href="#"><%= vr.legisnum %></a></td>
+        <td><%= vr.vote %></td>
+        <td><span class="vote-descr"><%= vr.descr %></span> <br/> <%= vr.question %></td>
+        <!--<td><%= h(vr.inspect) %></td>-->
+      </tr>
+    <% end %>
+  </tbody>
+</table>

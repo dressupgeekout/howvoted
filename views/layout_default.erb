@@ -1,0 +1,30 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Howvoted.</title>
+  <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+</head>
+<body>
+
+<header>
+  <hgroup>
+    <h1>Howvoted.</h1>
+  </hgroup>
+
+  <a href="/">All Legislators</a>
+
+  <br/>
+
+  <% (2017..Time.now.year).each do |y| %>
+    <ul class="years-list">
+      <li><a href="<%= request.path_info %>?<%= Rack::Utils.build_query(params_with_changed_year(y)) %>"><%= y %></a></li>
+    </ul>
+  <% end %>
+</header>
+
+<%= yield %>
+
+</body>
+</html>
