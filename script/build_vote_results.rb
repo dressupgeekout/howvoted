@@ -4,8 +4,6 @@ require 'nokogiri'
 require 'optparse'
 require 'sequel'
 
-require 'pmap'
-
 CACHE_DIR = File.join(ENV["HOME"], ".cache", "howvoted").freeze
 HOST = "clerk.house.gov".freeze
 PATH_TEMPLATE = "/evs/%d/roll%03d.xml".freeze
@@ -105,7 +103,7 @@ end
 # Didn't set the start? That means we're all done!
 exit if start == -1
 
-(start..@n_roll_calls).peach(4) do |i|
+(start..@n_roll_calls).each do |i|
   DB.transaction do
     doc = Nokogiri.XML(get(@year, i))
 
