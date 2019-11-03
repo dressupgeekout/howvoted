@@ -13,6 +13,10 @@ class Legislator
   attr_accessor :state
   attr_accessor :role
   attr_accessor :name
+
+  def pretty
+    return "#{@name} (#{@party}-#{@state})"
+  end
 end
 
 if $0 == __FILE__

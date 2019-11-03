@@ -54,6 +54,16 @@ table {
   font-style: italic;
 }
 
-.years-list {
-  
+#compare-table {
+  td.compare-same {
+    color: #888;
+  }
+
+  td.compare-different {
+    font-weight: bold;
+  }
+
+  tr.compare-different-row {
+    background-color: #ff9;
+  }
 }

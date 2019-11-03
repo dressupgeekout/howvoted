@@ -73,10 +73,11 @@ get '/' do
   }
 end
 
-get '/record' do
+get '/record/?' do
   vrs = []
   name_id = params["name_id"] # XXX or 404
 
+  # XXX bleh
   (1..500).each do |n|
     vrs << VoteResult.new(:name_id => name_id, :year => year, :number => n)
   end
@@ -88,4 +89,27 @@ get '/record' do
     :results => vrs,
     :legislator => store.transaction { store[name_id] },
   }
+end
+
+get '/compare/?' do
+  name_id1 = params["name_id1"]
+  name_id2 = params["name_id2"]
+  store = LEGISLATORS[year]
+
+  vrs1 = []
+  vrs2 = []
+
+  # XXX bleh
+  (1..500).each do |n|
+    vrs1 << VoteResult.new(:name_id => name_id1, :year => year, :number => n)
+    vrs2 << VoteResult.new(:name_id => name_id2, :year => year, :number => n)
+  end
+
+  erb(:compare, :layout => :layout_default, :locals => {
+    :legislator1 => store.transaction { store[name_id1] },
+    :legislator2 => store.transaction { store[name_id2] },
+    :legislator1_results => vrs1,
+    :legislator2_results => vrs2,
+    :congress => year_to_congress,
+  })
 end

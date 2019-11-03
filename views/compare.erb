@@ -1,0 +1,29 @@
+<h2>Comparison: <%= legislator1.pretty %> &amp; <%= legislator2.pretty %></h2>
+
+<h3><%= congress[0] %> Congress, <%= congress[1] %> Session (<%= year %>)</h3>
+
+<table id="compare-table">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th><%= legislator1.pretty %></th>
+      <th><%= legislator2.pretty %></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% legislator1_results.length.times do |i| %>
+      <% same = (legislator1_results[i].vote == legislator2_results[i].vote) %>
+      <tr class="<%= 'compare-different-row' if not same %>">
+        <td><%= legislator1_results[i].date %></td>
+        <td>
+          <span class="vote-descr"><%= legislator1_results[i].descr %></span> <br/>
+          <%= legislator1_results[i].question %>
+        </td>
+        <td class="<%= same ? 'compare-same' : 'compare-different' %>"><%= legislator1_results[i].vote %></td>
+        <td class="<%= same ? 'compare-same' : 'compare-different' %>"><%= legislator2_results[i].vote %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
