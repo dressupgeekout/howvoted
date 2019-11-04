@@ -72,7 +72,7 @@ end
 get '/' do
   erb :legislators, :layout => :layout_default, :locals => {
     :congress => year_to_congress,
-    :legislators => Legislator.where(:year => year).all,
+    :legislators => Legislator.where(:year => year).order_by(:name).all,
   }
 end
 

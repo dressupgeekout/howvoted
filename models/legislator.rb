@@ -10,4 +10,8 @@ class Legislator < Sequel::Model(:legislators)
   def portrait_img
     return %Q(<img alt="" src="#{self.portrait_url}" height="225"/>)
   end
+
+  def senator?
+    return self.senator
+  end
 end
