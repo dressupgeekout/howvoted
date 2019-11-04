@@ -95,6 +95,10 @@ get '/compare/?' do
   legislator1 = Legislator.where(:year => year, :name_id => name_id1).first
   legislator2 = Legislator.where(:year => year, :name_id => name_id2).first
 
+  if (legislator1.senator? && !legislator2.senator?) || (!legislator1.senator? && legislator2.senator?)
+    # XXX 400 they both have to be senators, OR neither of them.
+  end
+
   erb(:compare, :layout => :layout_default, :locals => {
     :legislator1 => legislator1,
     :legislator2 => legislator2,
